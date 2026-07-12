@@ -13,6 +13,10 @@ import {
   PriorityRanking,
   type PriorityRankingData,
 } from "@/components/PriorityRanking";
+import {
+  CompetitorView,
+  type CompetitorData,
+} from "@/components/CompetitorView";
 import { TrustPanel, type TrustPanelData } from "@/components/TrustPanel";
 import { SENTIMENT, LEGEND_ORDER, type Split } from "@/lib/sentiment";
 import { topicLabel } from "@/lib/topics";
@@ -106,7 +110,6 @@ export default function Home() {
           note={`${pain.count} mentions · ${pain.pct_negative}% negative · the dominant conversation`}
         />
         <StatCard
-          id="competitor"
           icon={<SwordsIcon />}
           tint="#7c3aed"
           label="Competitor threat"
@@ -196,9 +199,11 @@ export default function Home() {
           <strong>Competitor is deliberately absent</strong> from this list —
           separate what you fix from what you fight. NgoodPay chatter is
           competitive intelligence, not an operational bug to triage.{" "}
-          <a href="#competitor">See the competitor threat &rarr;</a>
+          <a href="#competitor">See the competitor view &rarr;</a>
         </p>
       </Card>
+
+      <CompetitorView data={metrics.competitor as CompetitorData} />
 
       <TrustPanel data={metrics.trust_panel as TrustPanelData} />
     </div>

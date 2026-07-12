@@ -152,6 +152,63 @@ class TestPriorityRanking:
         assert pr["top_exceeds_rest"] is True
 
 
+class TestCompetitor:
+    def test_two_separate_signals_split(self, metrics):
+        c = metrics["competitor"]
+        assert c["name"] == "NgoodPay"
+        assert c["comparison"]["count"] == 72
+        assert c["promo"]["count"] == 9
+        # 72 + 9 must equal the headline's total competitor footprint.
+        assert c["total_posts"] == 81
+        assert c["total_posts"] == metrics["headline"]["top_competitor"]["mentions"]
+
+    def test_comparison_posts_all_negative(self, metrics):
+        comp = metrics["competitor"]["comparison"]
+        assert comp["pct_negative"] == 100.0
+        s = comp["sentiment"]
+        assert s["negative"] == 72
+        assert s["neutral"] == 0
+        assert s["positive"] == 0
+
+    def test_theme_counts_corrected_not_substring_inflated(self, metrics):
+        # Corrected split: 'recharge...bonus' posts are cashback, not fees.
+        # Naive substring matching counted them as fees (recharge ⊃ charge),
+        # inflating fees to 32; the honest fee-complaint count is 10.
+        by = {t["key"]: t["count"] for t in metrics["competitor"]["comparison"]["themes"]}
+        assert by == {
+            "app_experience": 21,
+            "cashback_bonus": 21,
+            "agent_network": 13,
+            "fees_charges": 10,
+            "customer_care": 7,
+        }
+
+    def test_themes_partition_all_comparison_posts(self, metrics):
+        themes = metrics["competitor"]["comparison"]["themes"]
+        assert sum(t["count"] for t in themes) == 72
+        counts = [t["count"] for t in themes]
+        assert counts == sorted(counts, reverse=True)
+
+    def test_agent_theme_names_neighborhoods(self, metrics):
+        agent = next(
+            t for t in metrics["competitor"]["comparison"]["themes"]
+            if t["key"] == "agent_network"
+        )
+        assert len(agent["neighborhoods"]) == 13
+        for hood in ("Motijheel", "Mohakhali", "Bashundhara"):
+            assert hood in agent["neighborhoods"]
+
+    def test_fees_theme_cross_references_internal_complaints(self, metrics):
+        xref = metrics["competitor"]["comparison"]["fees_cross_ref"]
+        assert xref["topic"] == "charges_fees"
+        assert xref["count"] == 30
+        assert xref["pct_negative"] == 83.3
+
+    def test_promo_posts_carry_a_verbatim_example(self, metrics):
+        promo = metrics["competitor"]["promo"]
+        assert isinstance(promo["example"], str) and promo["example"]
+
+
 class TestTrustPanel:
     def test_filtered_totals(self, metrics):
         f = metrics["trust_panel"]["filtered"]

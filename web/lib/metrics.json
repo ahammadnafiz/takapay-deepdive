@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-12T17:36:34+00:00",
+  "generated_at": "2026-07-12T17:57:11+00:00",
   "headline": {
     "total_mentions": 660,
     "relevant_mentions": 590,
@@ -241,6 +241,70 @@
     "top_negative": 197,
     "rest_negative": 60,
     "top_exceeds_rest": true
+  },
+  "competitor": {
+    "name": "NgoodPay",
+    "total_posts": 81,
+    "comparison": {
+      "count": 72,
+      "pct_negative": 100.0,
+      "sentiment": {
+        "negative": 72,
+        "neutral": 0,
+        "positive": 0
+      },
+      "themes": [
+        {
+          "key": "app_experience",
+          "count": 21,
+          "example": "NgoodPay app ta ekhon TakaPay theke faster mone hoche, Bashundhara eo kaj kore."
+        },
+        {
+          "key": "cashback_bonus",
+          "count": 21,
+          "example": "Grameenphone recharge NgoodPay diye korle 500 e extra bonus, TakaPay e nai."
+        },
+        {
+          "key": "agent_network",
+          "count": 13,
+          "example": "Motijheel e NgoodPay agent beshi, TakaPay agent khuje pai na.",
+          "neighborhoods": [
+            "Motijheel",
+            "Mohakhali",
+            "Sylhet",
+            "Farmgate",
+            "Gulshan",
+            "Rajshahi",
+            "Uttara",
+            "Khulna",
+            "Mirpur",
+            "Banani",
+            "Bashundhara",
+            "Chittagong",
+            "Dhanmondi"
+          ]
+        },
+        {
+          "key": "fees_charges",
+          "count": 10,
+          "example": "NgoodPay er cash out charge 500 e onek kom, tai TakaPay chere switch korlam."
+        },
+        {
+          "key": "customer_care",
+          "count": 7,
+          "example": "baba bollo NgoodPay er customer care TakaPay er cheye onek valo."
+        }
+      ],
+      "fees_cross_ref": {
+        "topic": "charges_fees",
+        "count": 30,
+        "pct_negative": 83.3
+      }
+    },
+    "promo": {
+      "count": 9,
+      "example": "NgoodPay notun 500 taka cashback offer diyeche, keu try koreche?"
+    }
   },
   "trust_panel": {
     "filtered": {

@@ -7,6 +7,7 @@ import {
   SentimentIcon,
   TopicIcon,
   TargetIcon,
+  SwordsIcon,
   ShieldIcon,
   BookIcon,
 } from "./icons";
@@ -25,6 +26,7 @@ const NAV: NavItem[] = [
   { label: "Sentiment", icon: <SentimentIcon />, href: "#sentiment" },
   { label: "Topics", icon: <TopicIcon />, href: "#topics" },
   { label: "Fix this first", icon: <TargetIcon />, href: "#priority" },
+  { label: "Competitor", icon: <SwordsIcon />, href: "#competitor" },
   { label: "Trust panel", icon: <ShieldIcon />, href: "#trust" },
 ];
 

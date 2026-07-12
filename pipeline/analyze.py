@@ -195,6 +195,95 @@ def top_competitor(rows: list[dict]) -> dict:
     return {"name": name, "mentions": mentions}
 
 
+# Competitor comparison themes, in priority order (first match wins, so every
+# comparison post lands in exactly one theme). Word-boundary \bcharge\b is
+# deliberate: it excludes "recharge", so recharge-bonus posts are counted as
+# cashback — not fees. Naive substring matching (recharge ⊃ charge) inflated
+# fees to 32; the honest fee-complaint count is 10. Display labels live in the
+# frontend (web/components/CompetitorView.tsx), same as topic labels in topics.ts.
+COMPARISON_THEMES: tuple[tuple[str, tuple[re.Pattern, ...]], ...] = (
+    ("agent_network", (re.compile(r"\bagent\b"),)),
+    ("cashback_bonus", (re.compile(r"\bbonus\b"), re.compile(r"cashback"))),
+    ("fees_charges", (re.compile(r"\bcharge\b"), re.compile(r"cash out"))),
+    ("app_experience", (re.compile(r"\bapp\b"), re.compile(r"\bui\b"))),
+    ("customer_care", (re.compile(r"customer care"),)),
+)
+
+# "<Neighborhood> e NgoodPay agent beshi, ..." — the leading place name.
+NEIGHBORHOOD_RE = re.compile(r"^([A-Za-z]+)(?:\s+\d+)?\s+e ngoodpay agent", re.IGNORECASE)
+
+
+def classify_comparison_theme(text: str) -> str | None:
+    lowered = text.lower()
+    for key, patterns in COMPARISON_THEMES:
+        if any(p.search(lowered) for p in patterns):
+            return key
+    return None
+
+
+def build_competitor(rows: list[dict], topics: list[dict]) -> dict:
+    """Two deliberately separate NgoodPay signals (CONTEXT.md fix-vs-fight).
+
+    Comparison posts name TakaPay (they're relevant) and are 100% negative;
+    promo-only posts never name the brand and are competitive activity, not
+    brand sentiment. Theme counts are the corrected, non-substring-inflated
+    split (see COMPARISON_THEMES). The fees theme carries a cross-reference to
+    the internal charges_fees topic so the same weapon is visible from both sides.
+    """
+    competitor_rows = [r for r in rows if r["topic"] == "competitor"]
+    comparison = [r for r in competitor_rows if r["is_relevant"]]
+    promo = [r for r in competitor_rows if not r["is_relevant"]]
+
+    theme_rows: dict[str, list[dict]] = defaultdict(list)
+    for row in comparison:
+        key = classify_comparison_theme(row["text"])
+        if key is not None:
+            theme_rows[key].append(row)
+
+    themes = []
+    for key, _patterns in COMPARISON_THEMES:
+        members = theme_rows[key]
+        entry = {
+            "key": key,
+            "count": len(members),
+            "example": members[0]["text"] if members else "",
+        }
+        if key == "agent_network":
+            hoods = []
+            for r in members:
+                match = NEIGHBORHOOD_RE.match(r["text"])
+                if match:
+                    hood = match.group(1).title()
+                    if hood not in hoods:
+                        hoods.append(hood)
+            entry["neighborhoods"] = hoods
+        themes.append(entry)
+    themes.sort(key=lambda t: (-t["count"], t["key"]))
+
+    counts = Counter(r["sentiment"] for r in comparison)
+    charges_fees = next(t for t in topics if t["topic"] == "charges_fees")
+
+    return {
+        "name": top_competitor(rows)["name"],
+        "total_posts": len(competitor_rows),
+        "comparison": {
+            "count": len(comparison),
+            "pct_negative": pct(counts["negative"], len(comparison)),
+            "sentiment": {s: counts[s] for s in SENTIMENTS},
+            "themes": themes,
+            "fees_cross_ref": {
+                "topic": "charges_fees",
+                "count": charges_fees["total"],
+                "pct_negative": charges_fees["pct_negative"],
+            },
+        },
+        "promo": {
+            "count": len(promo),
+            "example": promo[0]["text"] if promo else "",
+        },
+    }
+
+
 def audited_sentiment(row: dict, suspects: dict[str, dict]) -> str:
     """The provided label, or the family's majority voice for a suspect row.
 
@@ -320,6 +409,7 @@ def build_metrics(csv_path: Path = DEFAULT_CSV) -> dict:
         },
         "topics": topics,
         "priority_ranking": priority_ranking(topics),
+        "competitor": build_competitor(rows, topics),
         "trust_panel": build_trust_panel(
             rows,
             relevant,
