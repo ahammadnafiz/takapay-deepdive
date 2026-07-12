@@ -9,6 +9,7 @@ import {
 import { Card, Legend } from "@/components/Card";
 import { SentimentDonut } from "@/components/SentimentDonut";
 import { TopicBars } from "@/components/TopicBars";
+import { TrustPanel, type TrustPanelData } from "@/components/TrustPanel";
 import { SENTIMENT, LEGEND_ORDER, type Split } from "@/lib/sentiment";
 import { topicLabel } from "@/lib/topics";
 
@@ -165,6 +166,8 @@ export default function Home() {
           questions, not grievances.
         </p>
       </Card>
+
+      <TrustPanel data={metrics.trust_panel as TrustPanelData} />
     </div>
   );
 }

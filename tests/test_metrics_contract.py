@@ -110,6 +110,65 @@ class TestTopics:
             assert t["negative"] + t["neutral"] + t["positive"] == t["total"]
 
 
+class TestTrustPanel:
+    def test_filtered_totals(self, metrics):
+        f = metrics["trust_panel"]["filtered"]
+        assert f["total"] == 70
+        assert f["off_topic"]["count"] == 61
+        assert f["competitor_only"]["count"] == 9
+
+    def test_off_topic_examples_are_verbatim(self, metrics):
+        examples = metrics["trust_panel"]["filtered"]["off_topic"]["examples"]
+        assert 2 <= len(examples) <= 3
+        assert all(isinstance(e, str) and e for e in examples)
+
+    def test_suspect_counts_and_asymmetry(self, metrics):
+        s = metrics["trust_panel"]["suspects"]
+        assert s["count"] == 34
+        assert s["complaints_as_positive"] == 24
+        assert s["praise_as_negative"] == 10
+
+    def test_suspect_items_expandable_detail(self, metrics):
+        items = metrics["trust_panel"]["suspects"]["items"]
+        assert len(items) == 34
+        for item in items:
+            assert item["text"]
+            assert item["label"] in ("positive", "negative", "neutral")
+            assert isinstance(item["score"], int)
+            assert item["family_says"] in ("positive", "negative", "neutral")
+
+    def test_duplicates(self, metrics):
+        d = metrics["trust_panel"]["duplicates"]
+        assert d["distinct_texts"] == 10
+        assert d["rows"] == 20
+
+    def test_trust_arc_shadow_number(self, metrics):
+        arc = metrics["trust_panel"]["trust_arc"]
+        assert arc["raw_pct"] == 51.2
+        assert arc["clean_pct"] == 55.8
+        assert arc["audited_pct"] == 58.1
+
+
+class TestMentionFlags:
+    def test_every_mention_has_flags(self, metrics):
+        mentions = metrics["mentions"]
+        assert len(mentions) == 660
+        for m in mentions:
+            assert isinstance(m["is_relevant"], bool)
+            assert isinstance(m["is_suspect"], bool)
+            assert isinstance(m["is_duplicate"], bool)
+
+    def test_flag_counts_match_trust_panel(self, metrics):
+        mentions = metrics["mentions"]
+        assert sum(m["is_relevant"] for m in mentions) == 590
+        assert sum(m["is_suspect"] for m in mentions) == 34
+        assert sum(m["is_duplicate"] for m in mentions) == 20
+
+    def test_suspects_are_a_subset_of_relevant(self, metrics):
+        mentions = metrics["mentions"]
+        assert all(m["is_relevant"] for m in mentions if m["is_suspect"])
+
+
 class TestEmittedArtifact:
     def test_main_writes_metrics_json(self, tmp_path):
         out = tmp_path / "metrics.json"

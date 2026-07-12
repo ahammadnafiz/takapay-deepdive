@@ -94,6 +94,23 @@ export function CalendarIcon(p: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function ShieldIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <path d="M12 3.5 5 6v6c0 4.5 3 7.7 7 8.5 4-.8 7-4 7-8.5V6l-7-2.5Z" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  );
+}
+
+export function ChevronIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
 export function BookIcon(p: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} width={16} height={16} {...p}>

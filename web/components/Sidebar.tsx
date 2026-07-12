@@ -4,6 +4,7 @@ import {
   OverviewIcon,
   SentimentIcon,
   TopicIcon,
+  ShieldIcon,
   BookIcon,
 } from "./icons";
 
@@ -21,6 +22,7 @@ const NAV: NavItem[] = [
   { label: "Overview", icon: <OverviewIcon />, href: "#overview", current: true },
   { label: "Sentiment", icon: <SentimentIcon />, href: "#sentiment" },
   { label: "Topics", icon: <TopicIcon />, href: "#topics" },
+  { label: "Trust panel", icon: <ShieldIcon />, href: "#trust" },
 ];
 
 const REPO_URL = "https://github.com/ahammadnafiz/takapay-deepdive";
