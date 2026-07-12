@@ -61,3 +61,15 @@ class TestEmittedArtifact:
         main(csv_path=CSV_PATH, out_path=out)
         written = json.loads(out.read_text())
         assert written["headline"]["relevant_mentions"] == 590
+
+    def test_committed_artifact_matches_pipeline(self, metrics):
+        """The dashboard builds from the committed web/lib/metrics.json, not
+        from the pipeline at deploy time. Guard against the artifact drifting
+        from its source: everything but the run timestamp must match.
+        """
+        committed_path = ROOT / "web" / "lib" / "metrics.json"
+        committed = json.loads(committed_path.read_text())
+        drop_ts = lambda m: {k: v for k, v in m.items() if k != "generated_at"}
+        assert drop_ts(committed) == drop_ts(metrics), (
+            "web/lib/metrics.json is stale — re-run `python3 pipeline/analyze.py`"
+        )
