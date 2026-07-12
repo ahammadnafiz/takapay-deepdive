@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-12T07:26:56+00:00",
+  "generated_at": "2026-07-12T12:55:10+00:00",
   "headline": {
     "total_mentions": 660,
     "relevant_mentions": 590,
@@ -28,5 +28,151 @@
       "name": "NgoodPay",
       "mentions": 81
     }
-  }
+  },
+  "sentiment": {
+    "raw_total": 660,
+    "clean_total": 590,
+    "raw": {
+      "negative": {
+        "count": 338,
+        "pct": 51.2
+      },
+      "neutral": {
+        "count": 85,
+        "pct": 12.9
+      },
+      "positive": {
+        "count": 237,
+        "pct": 35.9
+      }
+    },
+    "clean": {
+      "negative": {
+        "count": 329,
+        "pct": 55.8
+      },
+      "neutral": {
+        "count": 47,
+        "pct": 8.0
+      },
+      "positive": {
+        "count": 214,
+        "pct": 36.3
+      }
+    }
+  },
+  "topics": [
+    {
+      "topic": "failed_transaction",
+      "total": 220,
+      "negative": 197,
+      "neutral": 0,
+      "positive": 23,
+      "pct_negative": 89.5
+    },
+    {
+      "topic": "competitor",
+      "total": 72,
+      "negative": 72,
+      "neutral": 0,
+      "positive": 0,
+      "pct_negative": 100.0
+    },
+    {
+      "topic": "cashback_offer",
+      "total": 63,
+      "negative": 4,
+      "neutral": 0,
+      "positive": 59,
+      "pct_negative": 6.3
+    },
+    {
+      "topic": "recharge",
+      "total": 50,
+      "negative": 4,
+      "neutral": 0,
+      "positive": 46,
+      "pct_negative": 8.0
+    },
+    {
+      "topic": "send_money",
+      "total": 50,
+      "negative": 4,
+      "neutral": 0,
+      "positive": 46,
+      "pct_negative": 8.0
+    },
+    {
+      "topic": "charges_fees",
+      "total": 30,
+      "negative": 25,
+      "neutral": 0,
+      "positive": 5,
+      "pct_negative": 83.3
+    },
+    {
+      "topic": "agent_network",
+      "total": 26,
+      "negative": 0,
+      "neutral": 26,
+      "positive": 0,
+      "pct_negative": 0.0
+    },
+    {
+      "topic": "bill_payment",
+      "total": 24,
+      "negative": 1,
+      "neutral": 0,
+      "positive": 23,
+      "pct_negative": 4.2
+    },
+    {
+      "topic": "feature_query",
+      "total": 19,
+      "negative": 0,
+      "neutral": 19,
+      "positive": 0,
+      "pct_negative": 0.0
+    },
+    {
+      "topic": "customer_care",
+      "total": 13,
+      "negative": 4,
+      "neutral": 0,
+      "positive": 9,
+      "pct_negative": 30.8
+    },
+    {
+      "topic": "login_otp",
+      "total": 10,
+      "negative": 9,
+      "neutral": 0,
+      "positive": 1,
+      "pct_negative": 90.0
+    },
+    {
+      "topic": "app_crash",
+      "total": 9,
+      "negative": 8,
+      "neutral": 0,
+      "positive": 1,
+      "pct_negative": 88.9
+    },
+    {
+      "topic": "app_experience",
+      "total": 2,
+      "negative": 1,
+      "neutral": 0,
+      "positive": 1,
+      "pct_negative": 50.0
+    },
+    {
+      "topic": "product_news",
+      "total": 2,
+      "negative": 0,
+      "neutral": 2,
+      "positive": 0,
+      "pct_negative": 0.0
+    }
+  ]
 }

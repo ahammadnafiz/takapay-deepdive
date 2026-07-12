@@ -371,6 +371,227 @@ body {
   font-weight: 650;
 }
 
+/* ============================ chart cards ============================ */
+
+.section {
+  margin-top: 20px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px 24px;
+  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.03);
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.card-title {
+  font-size: 1.0625rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+.card-sub {
+  margin-top: 3px;
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 3px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+}
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ---- donut ---- */
+
+.donut-body {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  flex-wrap: wrap;
+}
+
+.donut {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.donut-center .big {
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.donut-center .small {
+  font-size: 0.75rem;
+  color: var(--ink-3);
+}
+
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.donut-legend .row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.donut-legend .swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.donut-legend .name {
+  font-size: 0.875rem;
+  color: var(--ink-2);
+  min-width: 62px;
+}
+
+.donut-legend .val {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  min-width: 46px;
+}
+
+.donut-legend .sub {
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+
+.donut-note {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+}
+
+.donut-note a {
+  color: var(--teal-deep);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--teal-deep) 32%, transparent);
+}
+
+/* ---- topic bars ---- */
+
+.tbars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tbar {
+  display: grid;
+  grid-template-columns: 148px 1fr 40px;
+  align-items: center;
+  gap: 14px;
+}
+
+.tbar-name {
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tbar-track {
+  min-width: 0;
+}
+
+.tbar-fill {
+  display: flex;
+  gap: 2px;
+  height: 22px;
+  border-radius: 5px;
+  overflow: hidden;
+  min-width: 3px;
+}
+
+.tbar-seg {
+  height: 100%;
+  min-width: 2px;
+  transition: opacity 120ms var(--ease-out);
+}
+
+.tbar-fill:hover .tbar-seg {
+  opacity: 0.55;
+}
+
+.tbar-fill .tbar-seg:hover {
+  opacity: 1;
+}
+
+.tbar-total {
+  font-size: 0.8125rem;
+  font-weight: 650;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.topics-note {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+@media (max-width: 520px) {
+  .tbar {
+    grid-template-columns: 96px 1fr 34px;
+    gap: 10px;
+  }
+}
+
 /* ============================ responsive ============================ */
 
 @media (max-width: 860px) {

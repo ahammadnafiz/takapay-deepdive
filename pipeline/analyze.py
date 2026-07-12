@@ -61,6 +61,28 @@ def top_pain_point(relevant: list[dict]) -> dict:
     }
 
 
+def topic_breakdown(relevant: list[dict]) -> list[dict]:
+    """Per-topic sentiment on the Relevant Mentions, sorted by volume.
+
+    off_topic never appears — those rows are all irrelevant (they never name
+    the brand) and were dropped before this point.
+    """
+    out = []
+    for topic in {r["topic"] for r in relevant}:
+        rows_t = [r for r in relevant if r["topic"] == topic]
+        counts = Counter(r["sentiment"] for r in rows_t)
+        out.append({
+            "topic": topic,
+            "total": len(rows_t),
+            "negative": counts["negative"],
+            "neutral": counts["neutral"],
+            "positive": counts["positive"],
+            "pct_negative": pct(counts["negative"], len(rows_t)),
+        })
+    out.sort(key=lambda t: (-t["total"], t["topic"]))
+    return out
+
+
 def top_competitor(rows: list[dict]) -> dict:
     names: Counter[str] = Counter()
     for row in rows:
@@ -90,6 +112,13 @@ def build_metrics(csv_path: Path = DEFAULT_CSV) -> dict:
             "top_pain_point": top_pain_point(relevant),
             "top_competitor": top_competitor(rows),
         },
+        "sentiment": {
+            "raw_total": len(rows),
+            "clean_total": len(relevant),
+            "raw": sentiment_split(rows),
+            "clean": sentiment_split(relevant),
+        },
+        "topics": topic_breakdown(relevant),
     }
 
 

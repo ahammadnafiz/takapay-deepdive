@@ -55,6 +55,61 @@ class TestHeadline:
         assert c["mentions"] == 81
 
 
+class TestSentiment:
+    def test_raw_split(self, metrics):
+        s = metrics["sentiment"]
+        assert s["raw_total"] == 660
+        r = s["raw"]
+        assert r["negative"]["count"] == 338
+        assert r["negative"]["pct"] == 51.2
+        assert r["positive"]["count"] == 237
+        assert r["neutral"]["count"] == 85
+
+    def test_clean_split_matches_headline(self, metrics):
+        s = metrics["sentiment"]
+        assert s["clean_total"] == 590
+        assert s["clean"] == metrics["headline"]["clean_sentiment"]
+
+
+class TestTopics:
+    def test_sorted_by_volume_descending(self, metrics):
+        totals = [t["total"] for t in metrics["topics"]]
+        assert totals == sorted(totals, reverse=True)
+
+    def test_off_topic_noise_excluded(self, metrics):
+        assert all(t["topic"] != "off_topic" for t in metrics["topics"])
+
+    def test_topics_cover_all_relevant_mentions(self, metrics):
+        assert sum(t["total"] for t in metrics["topics"]) == 590
+
+    def test_dominant_topic(self, metrics):
+        top = metrics["topics"][0]
+        assert top["topic"] == "failed_transaction"
+        assert top["total"] == 220
+        assert top["pct_negative"] == 89.5
+
+    def test_key_topic_counts(self, metrics):
+        by = {t["topic"]: t for t in metrics["topics"]}
+        assert by["competitor"]["total"] == 72
+        assert by["competitor"]["pct_negative"] == 100.0
+        assert by["cashback_offer"]["total"] == 63
+        assert by["charges_fees"]["total"] == 30
+        assert by["charges_fees"]["pct_negative"] == 83.3
+
+    def test_informational_topics_are_genuinely_neutral(self, metrics):
+        # agent_network and feature_query are location/how-to queries, not
+        # complaints — 0 negative is correct, not a labeling error.
+        by = {t["topic"]: t for t in metrics["topics"]}
+        assert by["agent_network"]["total"] == 26
+        assert by["agent_network"]["negative"] == 0
+        assert by["feature_query"]["total"] == 19
+        assert by["feature_query"]["negative"] == 0
+
+    def test_per_topic_split_sums_to_total(self, metrics):
+        for t in metrics["topics"]:
+            assert t["negative"] + t["neutral"] + t["positive"] == t["total"]
+
+
 class TestEmittedArtifact:
     def test_main_writes_metrics_json(self, tmp_path):
         out = tmp_path / "metrics.json"

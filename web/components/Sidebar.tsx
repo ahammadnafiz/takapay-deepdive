@@ -19,8 +19,8 @@ type NavItem = {
 // to link somewhere that doesn't exist yet.
 const NAV: NavItem[] = [
   { label: "Overview", icon: <OverviewIcon />, href: "#overview", current: true },
-  { label: "Sentiment", icon: <SentimentIcon /> },
-  { label: "Topics", icon: <TopicIcon /> },
+  { label: "Sentiment", icon: <SentimentIcon />, href: "#sentiment" },
+  { label: "Topics", icon: <TopicIcon />, href: "#topics" },
 ];
 
 const REPO_URL = "https://github.com/ahammadnafiz/takapay-deepdive";

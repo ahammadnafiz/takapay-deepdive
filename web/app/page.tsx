@@ -6,14 +6,11 @@ import {
   SwordsIcon,
   CalendarIcon,
 } from "@/components/icons";
-
-const TOPIC_LABELS: Record<string, string> = {
-  failed_transaction: "Failed transactions",
-};
-
-function topicLabel(topic: string): string {
-  return TOPIC_LABELS[topic] ?? topic.replaceAll("_", " ");
-}
+import { Card, Legend } from "@/components/Card";
+import { SentimentDonut } from "@/components/SentimentDonut";
+import { TopicBars } from "@/components/TopicBars";
+import { SENTIMENT, LEGEND_ORDER, type Split } from "@/lib/sentiment";
+import { topicLabel } from "@/lib/topics";
 
 function StatCard({
   icon,
@@ -119,6 +116,55 @@ export default function Home() {
           data-quality breakdown ships with the trust panel.
         </p>
       </div>
+
+      <Card
+        id="sentiment"
+        title="Sentiment breakdown"
+        subtitle="Positive, neutral, and negative across the 590 relevant mentions"
+        legend={
+          <Legend
+            items={LEGEND_ORDER.map((k) => ({
+              label: SENTIMENT[k].label,
+              color: SENTIMENT[k].color,
+            }))}
+          />
+        }
+      >
+        <SentimentDonut
+          split={metrics.sentiment.clean as Split}
+          total={metrics.sentiment.clean_total}
+        />
+        <p className="donut-note">
+          Negative is the majority sentiment. The unfiltered feed reported only{" "}
+          {metrics.headline.raw_negative_pct}% negative —{" "}
+          <a href="#trust">see why filtering raises it</a> in the data-quality
+          panel.
+        </p>
+      </Card>
+
+      <Card
+        id="topics"
+        title="What's driving the conversation"
+        subtitle="Every relevant mention by topic, sorted by volume"
+        legend={
+          <Legend
+            items={LEGEND_ORDER.map((k) => ({
+              label: SENTIMENT[k].label,
+              color: SENTIMENT[k].color,
+            }))}
+          />
+        }
+      >
+        <TopicBars topics={metrics.topics} />
+        <p className="topics-note">
+          One topic — failed transactions — is a third of all relevant volume at{" "}
+          {metrics.topics[0].pct_negative}% negative. Not every topic is a
+          complaint: <strong>agent network</strong> and{" "}
+          <strong>feature query</strong> are all-neutral because they&rsquo;re
+          &ldquo;where&rsquo;s an agent&rdquo; and &ldquo;how do I&rdquo;
+          questions, not grievances.
+        </p>
+      </Card>
     </div>
   );
 }
