@@ -59,6 +59,16 @@ export function TopicIcon(p: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function TargetIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="5" />
+      <circle cx="12" cy="12" r="1" />
+    </svg>
+  );
+}
+
 export function MentionsIcon(p: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...p}>

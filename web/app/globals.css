@@ -446,23 +446,32 @@ body {
 .donut-center {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
   text-align: center;
-  line-height: 1.1;
 }
 
+/* The big number is pinned to the ring's true center; the caption trails
+   below it independently so it never pulls the number off-center. */
 .donut-center .big {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 1.55rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--ink);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .donut-center .small {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 14px);
   font-size: 0.75rem;
   color: var(--ink-3);
+  white-space: nowrap;
 }
 
 .donut-legend {
@@ -589,6 +598,116 @@ body {
   .tbar {
     grid-template-columns: 96px 1fr 34px;
     gap: 10px;
+  }
+}
+
+/* ---- priority ranking ("fix this first") ---- */
+
+.prank-hero {
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--down) 7%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--down) 22%, var(--border));
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.prank-hero strong {
+  color: var(--ink);
+}
+
+.prank {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.prank-row {
+  display: grid;
+  grid-template-columns: 20px 148px 1fr auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.prank-rank {
+  font-size: 0.75rem;
+  font-weight: 650;
+  color: var(--ink-3);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.prank-name {
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prank-track {
+  min-width: 0;
+}
+
+.prank-fill {
+  height: 22px;
+  min-width: 3px;
+  border-radius: 5px;
+  transition: opacity 120ms var(--ease-out);
+}
+
+.prank-row:hover .prank-fill {
+  opacity: 0.85;
+}
+
+.prank-count {
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.prank-count strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.prank-context {
+  color: var(--ink-3);
+}
+
+.prank-note {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+.prank-note strong {
+  color: var(--ink-2);
+}
+
+.prank-note a {
+  color: var(--teal-deep);
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .prank-row {
+    grid-template-columns: 16px 84px 1fr;
+    gap: 8px;
+  }
+  .prank-count {
+    grid-column: 2 / -1;
+    text-align: right;
   }
 }
 

@@ -9,11 +9,16 @@ import {
 import { Card, Legend } from "@/components/Card";
 import { SentimentDonut } from "@/components/SentimentDonut";
 import { TopicBars } from "@/components/TopicBars";
+import {
+  PriorityRanking,
+  type PriorityRankingData,
+} from "@/components/PriorityRanking";
 import { TrustPanel, type TrustPanelData } from "@/components/TrustPanel";
 import { SENTIMENT, LEGEND_ORDER, type Split } from "@/lib/sentiment";
 import { topicLabel } from "@/lib/topics";
 
 function StatCard({
+  id,
   icon,
   tint,
   label,
@@ -22,6 +27,7 @@ function StatCard({
   chip,
   note,
 }: {
+  id?: string;
   icon: ReactNode;
   tint: string;
   label: string;
@@ -31,7 +37,7 @@ function StatCard({
   note: string;
 }) {
   return (
-    <div className="stat-card">
+    <div className="stat-card" id={id}>
       <div className="stat-head">
         <span
           className="stat-icon"
@@ -55,6 +61,7 @@ export default function Home() {
   const h = metrics.headline;
   const neg = h.clean_sentiment.negative;
   const pain = h.top_pain_point;
+  const pr = metrics.priority_ranking as PriorityRankingData;
 
   return (
     <div id="overview">
@@ -64,7 +71,7 @@ export default function Home() {
           <p className="page-sub">
             An at-a-glance read on TakaPay across 7 platforms. Of{" "}
             {h.total_mentions} posts collected, {h.relevant_mentions} actually
-            name the brand — every number here is computed on those.
+            name the brand, and every number here is computed on those.
           </p>
         </div>
         <span className="date-pill">
@@ -96,9 +103,10 @@ export default function Home() {
           label="Top pain point"
           value={topicLabel(pain.topic)}
           isText
-          note={`${pain.count} mentions · ${pain.pct_negative}% negative — the dominant conversation`}
+          note={`${pain.count} mentions · ${pain.pct_negative}% negative · the dominant conversation`}
         />
         <StatCard
+          id="competitor"
           icon={<SwordsIcon />}
           tint="#7c3aed"
           label="Competitor threat"
@@ -112,7 +120,7 @@ export default function Home() {
         <span className="teaser-dot" aria-hidden />
         <p>
           <strong>These numbers are already filtered.</strong> The raw feed
-          reads more positive than reality — it includes posts that never
+          reads more positive than reality: it includes posts that never
           mention TakaPay and labels that contradict their own text. The full
           data-quality breakdown ships with the trust panel.
         </p>
@@ -137,8 +145,8 @@ export default function Home() {
         />
         <p className="donut-note">
           Negative is the majority sentiment. The unfiltered feed reported only{" "}
-          {metrics.headline.raw_negative_pct}% negative —{" "}
-          <a href="#trust">see why filtering raises it</a> in the data-quality
+          {metrics.headline.raw_negative_pct}% negative.{" "}
+          <a href="#trust">See why filtering raises it</a> in the data-quality
           panel.
         </p>
       </Card>
@@ -158,12 +166,37 @@ export default function Home() {
       >
         <TopicBars topics={metrics.topics} />
         <p className="topics-note">
-          One topic — failed transactions — is a third of all relevant volume at{" "}
+          One topic, failed transactions, is a third of all relevant volume at{" "}
           {metrics.topics[0].pct_negative}% negative. Not every topic is a
           complaint: <strong>agent network</strong> and{" "}
           <strong>feature query</strong> are all-neutral because they&rsquo;re
           &ldquo;where&rsquo;s an agent&rdquo; and &ldquo;how do I&rdquo;
           questions, not grievances.
+        </p>
+      </Card>
+
+      <Card
+        id="priority"
+        title="Fix this first"
+        subtitle="Operational topics ranked by negative mentions — where fixing one thing moves the most conversation"
+      >
+        {pr.top_exceeds_rest && (
+          <div className="prank-hero">
+            <strong>
+              One issue drives more negative conversation than everything else
+              combined.
+            </strong>{" "}
+            Failed transactions alone account for {pr.top_negative} negative
+            mentions — more than the other {pr.topics.length - 1} fixable topics
+            put together ({pr.rest_negative}).
+          </div>
+        )}
+        <PriorityRanking topics={pr.topics} />
+        <p className="prank-note">
+          <strong>Competitor is deliberately absent</strong> from this list —
+          separate what you fix from what you fight. NgoodPay chatter is
+          competitive intelligence, not an operational bug to triage.{" "}
+          <a href="#competitor">See the competitor threat &rarr;</a>
         </p>
       </Card>
 

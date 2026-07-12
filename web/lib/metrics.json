@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-12T13:28:16+00:00",
+  "generated_at": "2026-07-12T17:36:34+00:00",
   "headline": {
     "total_mentions": 660,
     "relevant_mentions": 590,
@@ -175,6 +175,73 @@
       "pct_negative": 0.0
     }
   ],
+  "priority_ranking": {
+    "topics": [
+      {
+        "topic": "failed_transaction",
+        "negative": 197,
+        "total": 220,
+        "pct_negative": 89.5
+      },
+      {
+        "topic": "charges_fees",
+        "negative": 25,
+        "total": 30,
+        "pct_negative": 83.3
+      },
+      {
+        "topic": "login_otp",
+        "negative": 9,
+        "total": 10,
+        "pct_negative": 90.0
+      },
+      {
+        "topic": "app_crash",
+        "negative": 8,
+        "total": 9,
+        "pct_negative": 88.9
+      },
+      {
+        "topic": "cashback_offer",
+        "negative": 4,
+        "total": 63,
+        "pct_negative": 6.3
+      },
+      {
+        "topic": "recharge",
+        "negative": 4,
+        "total": 50,
+        "pct_negative": 8.0
+      },
+      {
+        "topic": "send_money",
+        "negative": 4,
+        "total": 50,
+        "pct_negative": 8.0
+      },
+      {
+        "topic": "customer_care",
+        "negative": 4,
+        "total": 13,
+        "pct_negative": 30.8
+      },
+      {
+        "topic": "bill_payment",
+        "negative": 1,
+        "total": 24,
+        "pct_negative": 4.2
+      },
+      {
+        "topic": "app_experience",
+        "negative": 1,
+        "total": 2,
+        "pct_negative": 50.0
+      }
+    ],
+    "top_negative": 197,
+    "rest_negative": 60,
+    "top_exceeds_rest": true
+  },
   "trust_panel": {
     "filtered": {
       "total": 70,

@@ -110,6 +110,48 @@ class TestTopics:
             assert t["negative"] + t["neutral"] + t["positive"] == t["total"]
 
 
+class TestPriorityRanking:
+    def test_dominant_topic_is_first(self, metrics):
+        pr = metrics["priority_ranking"]
+        top = pr["topics"][0]
+        assert top["topic"] == "failed_transaction"
+        assert top["negative"] == 197
+        assert top["total"] == 220
+        assert top["pct_negative"] == 89.5
+
+    def test_ordered_by_negative_count_descending(self, metrics):
+        negatives = [t["negative"] for t in metrics["priority_ranking"]["topics"]]
+        assert negatives == sorted(negatives, reverse=True)
+
+    def test_competitor_and_off_topic_absent(self, metrics):
+        topics = {t["topic"] for t in metrics["priority_ranking"]["topics"]}
+        assert "competitor" not in topics
+        assert "off_topic" not in topics
+
+    def test_only_fixable_topics_with_negatives(self, metrics):
+        # A "Fix this first" list is about things to fix — genuinely neutral
+        # topics (agent_network, feature_query, product_news) have no negatives
+        # and drop out by construction.
+        topics = metrics["priority_ranking"]["topics"]
+        assert len(topics) == 10
+        assert all(t["negative"] > 0 for t in topics)
+
+    def test_second_topic_and_volume_context(self, metrics):
+        topics = metrics["priority_ranking"]["topics"]
+        second = topics[1]
+        assert second["topic"] == "charges_fees"
+        assert second["negative"] == 25
+        for t in topics:
+            assert t["total"] >= t["negative"]
+            assert isinstance(t["pct_negative"], float)
+
+    def test_one_issue_exceeds_the_rest_combined(self, metrics):
+        pr = metrics["priority_ranking"]
+        assert pr["top_negative"] == 197
+        assert pr["rest_negative"] == 60
+        assert pr["top_exceeds_rest"] is True
+
+
 class TestTrustPanel:
     def test_filtered_totals(self, metrics):
         f = metrics["trust_panel"]["filtered"]

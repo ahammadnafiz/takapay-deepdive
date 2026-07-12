@@ -147,6 +147,41 @@ def topic_breakdown(relevant: list[dict]) -> list[dict]:
     return out
 
 
+# The "Fix this first" ranking is about operational pain the brand can act on.
+# competitor is excluded by design (fix-vs-fight — routed to the Competitor
+# view); off_topic never reaches the relevant set at all.
+PRIORITY_EXCLUDE = {"competitor", "off_topic"}
+
+
+def priority_ranking(topics: list[dict]) -> dict:
+    """Ops topics ranked by negative-mention count for the featured product call.
+
+    Built from topic_breakdown, so counts can never disagree with the topic
+    view. Topics with zero negatives aren't things to fix and drop out, leaving
+    a ranked to-do list. `top_exceeds_rest` backs the headline claim that one
+    issue drives more negative conversation than everything else combined.
+    """
+    ranked = [
+        {
+            "topic": t["topic"],
+            "negative": t["negative"],
+            "total": t["total"],
+            "pct_negative": t["pct_negative"],
+        }
+        for t in topics
+        if t["topic"] not in PRIORITY_EXCLUDE and t["negative"] > 0
+    ]
+    ranked.sort(key=lambda t: (-t["negative"], -t["total"], t["topic"]))
+    top_negative = ranked[0]["negative"]
+    rest_negative = sum(t["negative"] for t in ranked[1:])
+    return {
+        "topics": ranked,
+        "top_negative": top_negative,
+        "rest_negative": rest_negative,
+        "top_exceeds_rest": top_negative > rest_negative,
+    }
+
+
 def top_competitor(rows: list[dict]) -> dict:
     names: Counter[str] = Counter()
     for row in rows:
@@ -264,6 +299,7 @@ def build_metrics(csv_path: Path = DEFAULT_CSV) -> dict:
 
     suspects = detect_suspects(rows)
     duplicate_ids = detect_duplicate_ids(rows)
+    topics = topic_breakdown(relevant)
 
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -282,7 +318,8 @@ def build_metrics(csv_path: Path = DEFAULT_CSV) -> dict:
             "raw": raw_split,
             "clean": clean_split,
         },
-        "topics": topic_breakdown(relevant),
+        "topics": topics,
+        "priority_ranking": priority_ranking(topics),
         "trust_panel": build_trust_panel(
             rows,
             relevant,
