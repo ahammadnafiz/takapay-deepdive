@@ -6,9 +6,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "TakaPay — DeepDive Social Listening",
+  title: "TakaPay · DeepDive Social Listening",
   description:
-    "What people are saying about TakaPay, June 2026 — sentiment, drivers, and data you can trust.",
+    "What people are saying about TakaPay, June 2026: sentiment, drivers, and data you can trust.",
 };
 
 export default function RootLayout({

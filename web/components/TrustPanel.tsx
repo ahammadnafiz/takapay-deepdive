@@ -62,7 +62,7 @@ export function TrustPanel({ data }: { data: TrustPanelData }) {
           </h2>
           <p className="card-sub">
             Every exclusion and flag on this page is disclosed here. The only
-            silent exclusion is relevance — everything else is flagged, not
+            silent exclusion is relevance; everything else is flagged, not
             deleted or corrected.
           </p>
         </div>
@@ -92,7 +92,7 @@ export function TrustPanel({ data }: { data: TrustPanelData }) {
           <p className="trust-block-sub">
             {suspects.complaints_as_positive} complaints wearing a positive
             label vs {suspects.praise_as_negative} praise wearing a negative
-            label — the errors run in the brand&rsquo;s favor.
+            label; the errors run in the brand&rsquo;s favor.
           </p>
 
           <ul className="suspect-list">
@@ -135,7 +135,7 @@ export function TrustPanel({ data }: { data: TrustPanelData }) {
           </h3>
           <p className="trust-block-sub">
             Byte-identical text from different authors on different
-            platforms. Disclosed here, kept in every metric — the tool never
+            platforms. Disclosed here, kept in every metric. The tool never
             silently deletes rows.
           </p>
         </div>
@@ -143,7 +143,7 @@ export function TrustPanel({ data }: { data: TrustPanelData }) {
 
       <div className="trust-arc">
         <h3 className="trust-block-title">
-          The trust arc — what &ldquo;% negative&rdquo; depends on what you let reach it
+          The trust arc: what &ldquo;% negative&rdquo; depends on what you let reach it
         </h3>
         <div className="arc-bars">
           {ARC_STAGES.map((stage, i) => {
@@ -171,7 +171,7 @@ export function TrustPanel({ data }: { data: TrustPanelData }) {
         <p className="trust-block-sub">
           The dashboard&rsquo;s headline uses provided labels as-is (flag,
           don&rsquo;t fix). The {trust_arc.audited_pct}% figure is a{" "}
-          <strong>shadow number</strong> — the plausible worst case if the 34
+          <strong>shadow number</strong>: the plausible worst case if the 34
           suspect labels were corrected to match their text. It never appears
           as a headline.
         </p>
