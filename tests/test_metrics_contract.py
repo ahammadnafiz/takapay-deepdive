@@ -267,6 +267,28 @@ class TestMentionFlags:
         mentions = metrics["mentions"]
         assert all(m["is_relevant"] for m in mentions if m["is_suspect"])
 
+    def test_mentions_carry_the_feed_filter_fields(self, metrics):
+        # The mention feed filters on topic/sentiment/platform and shows a
+        # timestamp; every row must carry all four non-empty.
+        for m in metrics["mentions"]:
+            assert m["topic"]
+            assert m["sentiment"] in ("positive", "neutral", "negative")
+            assert m["platform"]
+            assert m["timestamp"]
+
+    def test_positive_failed_transaction_surfaces_suspects(self, metrics):
+        # The feed's demo moment (ticket #6 AC): filtering to positive +
+        # failed_transaction must surface suspect-flagged complaint rows.
+        # Guard the data so the composed-filter demo can never silently empty.
+        demo = [
+            m
+            for m in metrics["mentions"]
+            if m["topic"] == "failed_transaction"
+            and m["sentiment"] == "positive"
+            and m["is_suspect"]
+        ]
+        assert len(demo) == 17
+
 
 class TestEmittedArtifact:
     def test_main_writes_metrics_json(self, tmp_path):

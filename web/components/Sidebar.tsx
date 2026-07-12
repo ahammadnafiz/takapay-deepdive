@@ -9,6 +9,7 @@ import {
   TargetIcon,
   SwordsIcon,
   ShieldIcon,
+  MentionsIcon,
   BookIcon,
 } from "./icons";
 
@@ -28,6 +29,7 @@ const NAV: NavItem[] = [
   { label: "Fix this first", icon: <TargetIcon />, href: "#priority" },
   { label: "Competitor", icon: <SwordsIcon />, href: "#competitor" },
   { label: "Trust panel", icon: <ShieldIcon />, href: "#trust" },
+  { label: "Explore mentions", icon: <MentionsIcon />, href: "#feed" },
 ];
 
 const SECTION_IDS = NAV.filter((item) => item.href).map((item) =>

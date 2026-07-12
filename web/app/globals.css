@@ -14,6 +14,8 @@
   --up-bg: #d1fae5;
   --down: #ef4444;
   --down-bg: #fee2e2;
+  --info: #0369a1;
+  --info-bg: #e0f2fe;
 
   /* ---- surfaces + ink ---- */
   --bg: #f7f8fa;
@@ -1061,6 +1063,235 @@ body {
   font-size: 0.72rem;
   color: var(--ink-3);
   text-align: center;
+}
+
+/* ============================ mention feed ============================ */
+
+.feed-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  align-items: start;
+  gap: 12px;
+}
+
+.filter-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  padding-top: 6px;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--card);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: border-color 120ms var(--ease-out), background 120ms var(--ease-out),
+    color 120ms var(--ease-out);
+}
+
+.filter-chip:hover {
+  border-color: var(--ink-3);
+  color: var(--ink);
+}
+
+.filter-chip.is-active {
+  border-color: var(--teal-deep);
+  background: color-mix(in srgb, var(--teal-deep) 10%, var(--card));
+  color: var(--teal-deep);
+  font-weight: 600;
+}
+
+.filter-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.feed-status {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 16px 0 18px;
+}
+
+.feed-count {
+  font-size: 0.875rem;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.feed-count strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.feed-clear {
+  padding: 3px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--border-strong);
+  background: var(--card);
+  font-size: 0.78rem;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.feed-clear:hover {
+  border-color: var(--ink-3);
+  color: var(--ink);
+}
+
+.feed-hint {
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+
+.feed-hint em {
+  font-style: normal;
+  color: var(--ink-2);
+}
+
+.feed-empty {
+  padding: 32px 0;
+  text-align: center;
+  color: var(--ink-3);
+  font-size: 0.875rem;
+}
+
+.feed-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 640px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.mcard {
+  padding: 13px 15px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.mcard-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mcard-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+.mcard-platform {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.mcard-time {
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.mcard-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mcard-sentiment {
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.mcard-topic {
+  font-size: 0.72rem;
+  color: var(--ink-2);
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.05);
+}
+
+.mcard-text {
+  margin-top: 9px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.mcard-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.flag-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+}
+
+.flag-off-topic {
+  color: var(--ink-2);
+  background: rgba(17, 24, 39, 0.05);
+  border-color: var(--border-strong);
+}
+
+.flag-competitor-only {
+  color: var(--purple-deep);
+  background: color-mix(in srgb, var(--purple) 10%, transparent);
+}
+
+.flag-suspect {
+  color: var(--down);
+  background: var(--down-bg);
+}
+
+.flag-duplicate {
+  color: var(--info);
+  background: var(--info-bg);
+}
+
+@media (max-width: 520px) {
+  .filter-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }
 
 /* ============================ responsive ============================ */

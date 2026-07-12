@@ -18,6 +18,7 @@ import {
   type CompetitorData,
 } from "@/components/CompetitorView";
 import { TrustPanel, type TrustPanelData } from "@/components/TrustPanel";
+import { MentionFeed, type Mention } from "@/components/MentionFeed";
 import { SENTIMENT, LEGEND_ORDER, type Split } from "@/lib/sentiment";
 import { topicLabel } from "@/lib/topics";
 
@@ -206,6 +207,8 @@ export default function Home() {
       <CompetitorView data={metrics.competitor as CompetitorData} />
 
       <TrustPanel data={metrics.trust_panel as TrustPanelData} />
+
+      <MentionFeed mentions={metrics.mentions as Mention[]} />
     </div>
   );
 }
