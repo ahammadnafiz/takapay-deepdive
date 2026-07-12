@@ -1,4 +1,11 @@
+import type { ReactNode } from "react";
 import metrics from "@/lib/metrics.json";
+import {
+  MentionsIcon,
+  AlertIcon,
+  SwordsIcon,
+  CalendarIcon,
+} from "@/components/icons";
 
 const TOPIC_LABELS: Record<string, string> = {
   failed_transaction: "Failed transactions",
@@ -8,31 +15,40 @@ function topicLabel(topic: string): string {
   return TOPIC_LABELS[topic] ?? topic.replaceAll("_", " ");
 }
 
-function StatTile({
+function StatCard({
+  icon,
+  tint,
   label,
-  dotColor,
   value,
-  context,
-  textValue = false,
+  isText = false,
+  chip,
+  note,
 }: {
+  icon: ReactNode;
+  tint: string;
   label: string;
-  dotColor?: string;
   value: string;
-  context: string;
-  textValue?: boolean;
+  isText?: boolean;
+  chip?: { text: string; kind: "up" | "down" | "neutral" };
+  note: string;
 }) {
   return (
-    <div className="stat-tile">
-      <div className="stat-label">
-        {dotColor && (
-          <span className="stat-dot" style={{ background: dotColor }} aria-hidden />
-        )}
-        {label}
+    <div className="stat-card">
+      <div className="stat-head">
+        <span
+          className="stat-icon"
+          style={{ background: `${tint}1a`, color: tint }}
+          aria-hidden
+        >
+          {icon}
+        </span>
+        <span className="stat-label">{label}</span>
       </div>
-      <div className={`stat-value${textValue ? " stat-value--text" : ""}`}>
-        {value}
+      <div className={`stat-value${isText ? " is-text" : ""}`}>{value}</div>
+      <div className="stat-foot">
+        {chip && <span className={`chip ${chip.kind}`}>{chip.text}</span>}
+        <span className="stat-note">{note}</span>
       </div>
-      <div className="stat-context">{context}</div>
     </div>
   );
 }
@@ -43,50 +59,66 @@ export default function Home() {
   const pain = h.top_pain_point;
 
   return (
-    <main className="container">
-      <header className="masthead">
-        <div className="masthead-kicker">Social listening · June 2026</div>
-        <h1>What people are saying about TakaPay</h1>
-        <p className="masthead-sub">
-          {h.total_mentions} posts collected across 7 platforms.{" "}
-          {h.relevant_mentions} are actually about the brand — every number
-          below is computed on those.
-        </p>
+    <div id="overview">
+      <header className="page-head">
+        <div>
+          <h1 className="page-title">Overview</h1>
+          <p className="page-sub">
+            An at-a-glance read on TakaPay across 7 platforms. Of{" "}
+            {h.total_mentions} posts collected, {h.relevant_mentions} actually
+            name the brand — every number here is computed on those.
+          </p>
+        </div>
+        <span className="date-pill">
+          <CalendarIcon />
+          Jun 1 – Jun 30, 2026
+        </span>
       </header>
 
       <section className="stat-grid" aria-label="Headline metrics">
-        <StatTile
+        <StatCard
+          icon={<MentionsIcon />}
+          tint="#0d9488"
           label="Relevant mentions"
           value={h.relevant_mentions.toLocaleString()}
-          context={`of ${h.total_mentions} collected — ${h.excluded_mentions} irrelevant posts filtered out`}
+          chip={{ text: `of ${h.total_mentions}`, kind: "neutral" }}
+          note={`${h.excluded_mentions} off-brand posts filtered out`}
         />
-        <StatTile
+        <StatCard
+          icon={<AlertIcon />}
+          tint="#ef4444"
           label="Negative sentiment"
-          dotColor="var(--negative)"
           value={`${neg.pct}%`}
-          context={`${neg.count} negative mentions — raw feed said ${h.raw_negative_pct}%`}
+          chip={{ text: `raw feed said 51.2%`, kind: "neutral" }}
+          note={`${neg.count} of ${h.relevant_mentions} relevant mentions`}
         />
-        <StatTile
+        <StatCard
+          icon={<AlertIcon />}
+          tint="#ef4444"
           label="Top pain point"
-          dotColor="var(--negative)"
           value={topicLabel(pain.topic)}
-          context={`${pain.count} mentions, ${pain.pct_negative}% negative — the dominant conversation`}
-          textValue
+          isText
+          note={`${pain.count} mentions · ${pain.pct_negative}% negative — the dominant conversation`}
         />
-        <StatTile
+        <StatCard
+          icon={<SwordsIcon />}
+          tint="#7c3aed"
           label="Competitor threat"
-          dotColor="var(--accent)"
           value={h.top_competitor.name}
-          context={`${h.top_competitor.mentions} competitor posts in the feed this month`}
-          textValue
+          isText
+          note={`${h.top_competitor.mentions} competitor posts in the feed`}
         />
       </section>
 
-      <footer className="footnote">
-        Numbers are relevance-filtered before display — the raw feed
-        overstates neutrality. A full data-quality breakdown ships with the
-        trust panel.
-      </footer>
-    </main>
+      <div className="teaser">
+        <span className="teaser-dot" aria-hidden />
+        <p>
+          <strong>These numbers are already filtered.</strong> The raw feed
+          reads more positive than reality — it includes posts that never
+          mention TakaPay and labels that contradict their own text. The full
+          data-quality breakdown ships with the trust panel.
+        </p>
+      </div>
+    </div>
   );
 }
