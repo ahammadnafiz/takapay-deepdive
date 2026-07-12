@@ -1,0 +1,21 @@
+# local session / scratch artifacts
+.remember/
+blow.md
+.scratch/
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# node / next
+node_modules/
+web/.next/
+web/out/
+.vercel/
+.env*
+*.tsbuildinfo
+
+# os
+.DS_Store

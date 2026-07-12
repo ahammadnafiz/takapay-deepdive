@@ -1,0 +1,32 @@
+{
+  "generated_at": "2026-07-12T07:26:56+00:00",
+  "headline": {
+    "total_mentions": 660,
+    "relevant_mentions": 590,
+    "excluded_mentions": 70,
+    "clean_sentiment": {
+      "negative": {
+        "count": 329,
+        "pct": 55.8
+      },
+      "neutral": {
+        "count": 47,
+        "pct": 8.0
+      },
+      "positive": {
+        "count": 214,
+        "pct": 36.3
+      }
+    },
+    "raw_negative_pct": 51.2,
+    "top_pain_point": {
+      "topic": "failed_transaction",
+      "count": 220,
+      "pct_negative": 89.5
+    },
+    "top_competitor": {
+      "name": "NgoodPay",
+      "mentions": 81
+    }
+  }
+}
