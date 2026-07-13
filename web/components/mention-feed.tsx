@@ -153,6 +153,14 @@ export function MentionFeed({ mentions }: { mentions: Mention[] }) {
 
   const anyActive = topic || sentiment || platform;
 
+  // Reconciles the feed against the charts: the feed filters all 660 posts,
+  // the charts count only relevant ones, so e.g. Topic Competitor shows 81
+  // here but 72 in the topic chart. This line closes that gap in place.
+  const excludedCount = filtered.reduce(
+    (n, m) => n + (m.is_relevant ? 0 : 1),
+    0
+  );
+
   return (
     <Card id="feed" data-reveal className="scroll-mt-20">
       <CardHeader>
@@ -200,18 +208,26 @@ export function MentionFeed({ mentions }: { mentions: Mention[] }) {
             </span>
           </span>
           {anyActive ? (
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-7 text-xs"
-              onClick={() => {
-                setTopic(null);
-                setSentiment(null);
-                setPlatform(null);
-              }}
-            >
-              Clear filters
-            </Button>
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs"
+                onClick={() => {
+                  setTopic(null);
+                  setSentiment(null);
+                  setPlatform(null);
+                }}
+              >
+                Clear filters
+              </Button>
+              {excludedCount > 0 && (
+                <span className="text-muted-foreground text-xs">
+                  {excludedCount} of these never name TakaPay, so the charts
+                  above count {filtered.length - excludedCount}.
+                </span>
+              )}
+            </>
           ) : (
             <span className="text-muted-foreground text-xs">
               Try Topic{" "}
