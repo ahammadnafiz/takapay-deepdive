@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-12T17:57:11+00:00",
+  "generated_at": "2026-07-12T18:17:50+00:00",
   "headline": {
     "total_mentions": 660,
     "relevant_mentions": 590,
@@ -305,6 +305,114 @@
       "count": 9,
       "example": "NgoodPay notun 500 taka cashback offer diyeche, keu try koreche?"
     }
+  },
+  "language": {
+    "total": 660,
+    "banglish_pct": 59.1,
+    "coverage": [
+      {
+        "code": "bn-en",
+        "count": 390,
+        "pct": 59.1
+      },
+      {
+        "code": "bn",
+        "count": 155,
+        "pct": 23.5
+      },
+      {
+        "code": "en",
+        "count": 115,
+        "pct": 17.4
+      }
+    ],
+    "suspects_non_english": 25,
+    "suspects_total": 34,
+    "clean_total": 590,
+    "naive_negative": [
+      {
+        "code": "bn-en",
+        "count": 320,
+        "pct_negative": 65.9
+      },
+      {
+        "code": "bn",
+        "count": 155,
+        "pct_negative": 56.8
+      },
+      {
+        "code": "en",
+        "count": 115,
+        "pct_negative": 26.1
+      }
+    ],
+    "confound": {
+      "topic": "failed_transaction",
+      "rows": [
+        {
+          "code": "bn-en",
+          "count": 125,
+          "pct_negative": 90.4
+        },
+        {
+          "code": "bn",
+          "count": 95,
+          "pct_negative": 88.4
+        }
+      ]
+    }
+  },
+  "platform": {
+    "total": 590,
+    "overall_negative_pct": 55.8,
+    "band": {
+      "low": 47.1,
+      "high": 66.1
+    },
+    "rows": [
+      {
+        "platform": "Facebook",
+        "count": 198,
+        "pct": 33.6,
+        "pct_negative": 57.6
+      },
+      {
+        "platform": "Reddit",
+        "count": 75,
+        "pct": 12.7,
+        "pct_negative": 62.7
+      },
+      {
+        "platform": "News/Media",
+        "count": 71,
+        "pct": 12.0,
+        "pct_negative": 47.9
+      },
+      {
+        "platform": "Instagram",
+        "count": 68,
+        "pct": 11.5,
+        "pct_negative": 47.1
+      },
+      {
+        "platform": "YouTube",
+        "count": 65,
+        "pct": 11.0,
+        "pct_negative": 49.2
+      },
+      {
+        "platform": "Twitter",
+        "count": 57,
+        "pct": 9.7,
+        "pct_negative": 57.9
+      },
+      {
+        "platform": "TikTok",
+        "count": 56,
+        "pct": 9.5,
+        "pct_negative": 66.1
+      }
+    ]
   },
   "trust_panel": {
     "filtered": {

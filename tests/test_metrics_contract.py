@@ -209,6 +209,68 @@ class TestCompetitor:
         assert isinstance(promo["example"], str) and promo["example"]
 
 
+class TestLanguage:
+    def test_coverage_leads_with_banglish_share(self, metrics):
+        lang = metrics["language"]
+        assert lang["total"] == 660
+        assert lang["banglish_pct"] == 59.1
+        by = {r["code"]: r for r in lang["coverage"]}
+        assert by["bn-en"]["count"] == 390 and by["bn-en"]["pct"] == 59.1
+        assert by["bn"]["count"] == 155 and by["bn"]["pct"] == 23.5
+        assert by["en"]["count"] == 115 and by["en"]["pct"] == 17.4
+        assert sum(r["count"] for r in lang["coverage"]) == 660
+
+    def test_coverage_sorted_by_volume(self, metrics):
+        counts = [r["count"] for r in metrics["language"]["coverage"]]
+        assert counts == sorted(counts, reverse=True)
+
+    def test_non_english_suspect_share(self, metrics):
+        lang = metrics["language"]
+        assert lang["suspects_non_english"] == 25
+        assert lang["suspects_total"] == 34
+
+    def test_naive_per_language_negativity_on_clean_set(self, metrics):
+        # These are the confounded numbers; the view must caveat them.
+        by = {r["code"]: r for r in metrics["language"]["naive_negative"]}
+        assert by["bn-en"]["count"] == 320 and by["bn-en"]["pct_negative"] == 65.9
+        assert by["bn"]["count"] == 155 and by["bn"]["pct_negative"] == 56.8
+        assert by["en"]["count"] == 115 and by["en"]["pct_negative"] == 26.1
+
+    def test_confound_topic_holds_language_fixed(self, metrics):
+        # Within failed_transaction, negativity is near-identical across the two
+        # Bangla-family languages — language explains nothing once topic is held.
+        c = metrics["language"]["confound"]
+        assert c["topic"] == "failed_transaction"
+        by = {r["code"]: r for r in c["rows"]}
+        assert by["bn"]["count"] == 95 and by["bn"]["pct_negative"] == 88.4
+        assert by["bn-en"]["count"] == 125 and by["bn-en"]["pct_negative"] == 90.4
+        assert abs(by["bn"]["pct_negative"] - by["bn-en"]["pct_negative"]) < 3
+
+
+class TestPlatform:
+    def test_volume_and_reference_line(self, metrics):
+        p = metrics["platform"]
+        assert p["total"] == 590
+        assert p["overall_negative_pct"] == 55.8
+        top = p["rows"][0]
+        assert top["platform"] == "Facebook"
+        assert top["count"] == 198 and top["pct"] == 33.6
+        assert top["pct_negative"] == 57.6
+
+    def test_rows_sorted_by_volume_and_cover_clean_set(self, metrics):
+        rows = metrics["platform"]["rows"]
+        counts = [r["count"] for r in rows]
+        assert counts == sorted(counts, reverse=True)
+        assert sum(counts) == 590
+
+    def test_negativity_sits_in_a_flat_band(self, metrics):
+        # Platform doesn't explain sentiment: everything is in a 47-66% band.
+        rows = metrics["platform"]["rows"]
+        assert all(47 <= r["pct_negative"] <= 67 for r in rows)
+        band = metrics["platform"]["band"]
+        assert band["low"] == 47.1 and band["high"] == 66.1
+
+
 class TestTrustPanel:
     def test_filtered_totals(self, metrics):
         f = metrics["trust_panel"]["filtered"]

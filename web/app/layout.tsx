@@ -1,9 +1,20 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Sidebar } from "@/components/Sidebar";
+import { Geist } from "next/font/google";
+import { CalendarRange } from "lucide-react";
+
+import { AppSidebar } from "@/components/app-sidebar";
+import { ScrollFx } from "@/components/ScrollFx";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], display: "swap" });
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "TakaPay · DeepDive Social Listening",
@@ -15,12 +26,35 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={`${geist.variable} font-sans`}>
       <body>
-        <div className="shell">
-          <Sidebar />
-          <main className="main">{children}</main>
-        </div>
+        <TooltipProvider>
+          <SidebarProvider>
+            <AppSidebar />
+          <SidebarInset>
+            <header className="bg-background/90 sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b backdrop-blur-sm">
+              <div className="flex w-full items-center gap-2 px-4">
+                <SidebarTrigger className="-ml-1" />
+                <Separator
+                  orientation="vertical"
+                  className="mr-1 data-[orientation=vertical]:h-4"
+                />
+                <span className="text-sm font-medium">
+                  TakaPay · Social Listening
+                </span>
+                <Badge variant="outline" className="ml-auto gap-1.5 tabular-nums">
+                  <CalendarRange className="size-3.5" />
+                  Jun 1 – Jun 30, 2026
+                </Badge>
+              </div>
+            </header>
+            <main className="flex flex-1 flex-col gap-4 p-4 md:p-6">
+              {children}
+            </main>
+            </SidebarInset>
+          </SidebarProvider>
+        </TooltipProvider>
+        <ScrollFx />
       </body>
     </html>
   );

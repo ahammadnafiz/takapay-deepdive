@@ -1,13 +1,14 @@
 export type Sentiment = "negative" | "neutral" | "positive";
 
-// Chart marks use the deeper teal (#0d9488) so positive clears 3:1 contrast on
-// the light surface; the categorical set [teal, purple, red] is CVD-validated
-// (worst adjacent ΔE 74). Negative is red, not DeepDive's cyan, so charts about
-// negativity don't visually downplay it.
+// Sentiment is polarity, so it follows the diverging rule: a warm pole
+// (negative red), a cool pole (positive teal), and a neutral gray midpoint.
+// Validated on the light surface: worst adjacent CVD ΔE 13.1 (deutan),
+// all marks ≥3:1 contrast. Neutral gray sits between the poles in every
+// stack, so red and teal are never adjacent.
 export const SENTIMENT: Record<Sentiment, { label: string; color: string }> = {
   positive: { label: "Positive", color: "#0d9488" },
-  neutral: { label: "Neutral", color: "#7c3aed" },
-  negative: { label: "Negative", color: "#ef4444" },
+  neutral: { label: "Neutral", color: "#5c5f66" },
+  negative: { label: "Negative", color: "#e5484d" },
 };
 
 // Familiar legend order (positive → negative).

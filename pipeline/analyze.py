@@ -182,6 +182,102 @@ def priority_ranking(topics: list[dict]) -> dict:
     }
 
 
+# The one topic where the two Bangla-family languages both appear in volume, so
+# language can be compared with topic held fixed (report §8, "The Definitive
+# Test"). English shares zero topics with Banglish, so it can't enter here — that
+# disjointness IS the confound. feature_query is also shared but all-neutral, a
+# trivial comparison; failed_transaction is the meaningful high-anger test.
+CONFOUND_TOPIC = "failed_transaction"
+
+# Language codes, ordered for display (most-common first).
+LANGUAGE_ORDER = ("bn-en", "bn", "en")
+
+
+def build_language(
+    rows: list[dict], relevant: list[dict], suspects: dict[str, dict]
+) -> dict:
+    """Language as coverage, not anger (CONTEXT.md locked decision).
+
+    Coverage (the headline: 59% code-mixed Banglish) is measured on the full
+    feed; per-language negativity is measured on the clean set and is
+    deliberately confounded — English and Banglish share zero topics, so the
+    gap is a topic-mix artifact. The confound block proves it by holding one
+    topic fixed. Nothing here may imply "Banglish users are angrier".
+    """
+    coverage_counts = Counter(r["language"] for r in rows)
+    coverage = [
+        {"code": code, "count": coverage_counts[code], "pct": pct(coverage_counts[code], len(rows))}
+        for code in LANGUAGE_ORDER
+    ]
+
+    naive_negative = []
+    for code in LANGUAGE_ORDER:
+        lang_rows = [r for r in relevant if r["language"] == code]
+        negatives = sum(1 for r in lang_rows if r["sentiment"] == "negative")
+        naive_negative.append(
+            {"code": code, "count": len(lang_rows), "pct_negative": pct(negatives, len(lang_rows))}
+        )
+
+    confound_rows = []
+    for code in LANGUAGE_ORDER:
+        topic_rows = [
+            r for r in relevant if r["language"] == code and r["topic"] == CONFOUND_TOPIC
+        ]
+        if not topic_rows:
+            continue
+        negatives = sum(1 for r in topic_rows if r["sentiment"] == "negative")
+        confound_rows.append(
+            {"code": code, "count": len(topic_rows), "pct_negative": pct(negatives, len(topic_rows))}
+        )
+    confound_rows.sort(key=lambda r: -r["count"])
+
+    non_english_suspects = sum(
+        1 for r in rows if r["id"] in suspects and r["language"] != "en"
+    )
+
+    return {
+        "total": len(rows),
+        "banglish_pct": pct(coverage_counts["bn-en"], len(rows)),
+        "coverage": coverage,
+        "suspects_non_english": non_english_suspects,
+        "suspects_total": len(suspects),
+        "clean_total": len(relevant),
+        "naive_negative": naive_negative,
+        "confound": {"topic": CONFOUND_TOPIC, "rows": confound_rows},
+    }
+
+
+def build_platform(relevant: list[dict], overall_negative_pct: float) -> dict:
+    """Platform as where-to-watch, not why (CONTEXT.md locked decision).
+
+    Volume + %-negative on the clean set. Negativity sits in a flat band
+    everywhere, so the view shows it against the overall reference line to make
+    "platform doesn't explain sentiment, topic does" visible.
+    """
+    counts = Counter(r["platform"] for r in relevant)
+    rows = []
+    for platform, count in counts.items():
+        plat_rows = [r for r in relevant if r["platform"] == platform]
+        negatives = sum(1 for r in plat_rows if r["sentiment"] == "negative")
+        rows.append(
+            {
+                "platform": platform,
+                "count": count,
+                "pct": pct(count, len(relevant)),
+                "pct_negative": pct(negatives, count),
+            }
+        )
+    rows.sort(key=lambda r: (-r["count"], r["platform"]))
+    band = [r["pct_negative"] for r in rows]
+
+    return {
+        "total": len(relevant),
+        "overall_negative_pct": overall_negative_pct,
+        "band": {"low": min(band), "high": max(band)},
+        "rows": rows,
+    }
+
+
 def top_competitor(rows: list[dict]) -> dict:
     names: Counter[str] = Counter()
     for row in rows:
@@ -410,6 +506,8 @@ def build_metrics(csv_path: Path = DEFAULT_CSV) -> dict:
         "topics": topics,
         "priority_ranking": priority_ranking(topics),
         "competitor": build_competitor(rows, topics),
+        "language": build_language(rows, relevant, suspects),
+        "platform": build_platform(relevant, clean_split["negative"]["pct"]),
         "trust_panel": build_trust_panel(
             rows,
             relevant,
