@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/chart";
 
 const chartConfig = {
-  count: { label: "Comparison posts", color: "var(--chart-4)" },
+  count: { label: "Comparison posts", color: "var(--brand)" },
 } satisfies ChartConfig;
 
-// Competitor comparison themes — monochrome: these are counts of one series,
-// not categories competing for identity.
+// Competitor comparison themes in the single UI accent: counts of one
+// series, not categories competing for identity, and not a sentiment color.
 export function ThemeBars({
   themes,
 }: {

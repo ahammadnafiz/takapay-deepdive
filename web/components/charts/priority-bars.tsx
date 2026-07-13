@@ -21,8 +21,8 @@ const chartConfig = {
   negative: { label: "Negative mentions", color: "var(--sent-negative)" },
 } satisfies ChartConfig;
 
-// Bars are sized by negative-mention count — the axis the list is ranked
-// on — so the #1 issue reads as visually dominant, not just first.
+// Bars are sized by negative-mention count - the axis the list is ranked
+// on - so the #1 issue reads as visually dominant, not just first.
 export function PriorityBars({ topics }: { topics: PriorityTopic[] }) {
   const data = topics.map((t, i) => ({
     name: `${i + 1}. ${topicLabel(t.topic)}`,

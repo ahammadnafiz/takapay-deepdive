@@ -5,7 +5,7 @@ import { useEffect } from "react";
 // Adds .is-in to every [data-reveal] element as it enters the viewport.
 // The hidden initial state lives in CSS behind @media (scripting: enabled)
 // and (prefers-reduced-motion: no-preference), so without JS or with reduced
-// motion nothing is ever hidden — this observer only ever reveals.
+// motion nothing is ever hidden - this observer only ever reveals.
 export function ScrollFx() {
   useEffect(() => {
     const els = Array.from(document.querySelectorAll("[data-reveal]"));

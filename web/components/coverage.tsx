@@ -3,7 +3,6 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { NegativityBars, VolumeBars } from "@/components/charts/coverage-bars";
 import { topicLabel } from "@/lib/topics";
@@ -54,7 +53,12 @@ export function Coverage({
   return (
     <Card id="context" data-reveal className="scroll-mt-20">
       <CardHeader>
-        <CardTitle>Coverage &amp; reach</CardTitle>
+        <h2
+          data-slot="card-title"
+          className="font-heading text-base leading-snug font-medium"
+        >
+          Coverage &amp; reach
+        </h2>
         <CardDescription>
           Two footnotes for reading everything above: what language the feed
           speaks, and where the volume lives.
@@ -78,7 +82,7 @@ function LanguageBlock({ language }: { language: LanguageData }) {
 
   return (
     <div>
-      <h3 className="text-sm font-semibold">Language — coverage, not anger</h3>
+      <h3 className="text-sm font-semibold">Language - coverage, not anger</h3>
 
       <div className="mt-3 flex items-baseline gap-3">
         <span className="text-3xl font-semibold tracking-tight tabular-nums">
@@ -133,11 +137,11 @@ function PlatformBlock({ platform }: { platform: PlatformData }) {
   return (
     <div>
       <h3 className="text-sm font-semibold">
-        Platform — where to watch, not why
+        Platform - where to watch, not why
       </h3>
 
       <p className="text-muted-foreground mt-3 text-sm">
-        Negativity sits in a flat {platform.band.low}–{platform.band.high}%
+        Negativity sits in a flat {platform.band.low}-{platform.band.high}%
         band across every platform. Facebook is a third of the feed, so that
         is where to watch. What moves sentiment is topic, not platform.
       </p>

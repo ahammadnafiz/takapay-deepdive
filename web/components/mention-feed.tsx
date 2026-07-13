@@ -9,7 +9,6 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -157,7 +156,12 @@ export function MentionFeed({ mentions }: { mentions: Mention[] }) {
   return (
     <Card id="feed" data-reveal className="scroll-mt-20">
       <CardHeader>
-        <CardTitle>Explore the mentions</CardTitle>
+        <h2
+          data-slot="card-title"
+          className="font-heading text-base leading-snug font-medium"
+        >
+          Explore the mentions
+        </h2>
         <CardDescription>
           Every aggregate on this page traces back to these {mentions.length}{" "}
           posts. Filter by topic, sentiment, and platform; filters stack.

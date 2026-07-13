@@ -14,7 +14,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 // The audited stage is a shadow number (plausible worst case, never a
-// headline) — rendered hollow so it can't be read as a reported figure.
+// headline) - rendered hollow so it can't be read as a reported figure.
 export function TrustArc({
   raw,
   clean,

@@ -11,7 +11,6 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { TrustArc } from "@/components/charts/trust-arc";
 import { SENTIMENT, type Sentiment } from "@/lib/sentiment";
@@ -63,10 +62,13 @@ export function TrustPanel({ data }: { data: TrustPanelData }) {
   return (
     <Card id="trust" data-reveal className="scroll-mt-20">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <h2
+          data-slot="card-title"
+          className="font-heading flex items-center gap-2 text-base leading-snug font-medium"
+        >
           <ShieldCheck className="text-muted-foreground size-4" />
           What we filtered before showing you these numbers
-        </CardTitle>
+        </h2>
         <CardDescription>
           Every exclusion and flag on this page is disclosed here. The only
           silent exclusion is relevance; everything else is flagged, not

@@ -6,13 +6,12 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { ThemeBars } from "@/components/charts/theme-bars";
 import { topicLabel } from "@/lib/topics";
 
 // Competitor themes are their own taxonomy (not topics), so their display
-// names live here — the same "keys in the pipeline, labels in the frontend"
+// names live here - the same "keys in the pipeline, labels in the frontend"
 // split that topics.ts uses.
 const THEME_LABELS: Record<string, string> = {
   agent_network: "Agent network",
@@ -51,10 +50,13 @@ export function CompetitorView({ data }: { data: CompetitorData }) {
   return (
     <Card id="competitor" data-reveal className="scroll-mt-20">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <h2
+          data-slot="card-title"
+          className="font-heading flex items-center gap-2 text-base leading-snug font-medium"
+        >
           <Swords className="text-muted-foreground size-4" />
           Competitor: {name}
-        </CardTitle>
+        </h2>
         <CardDescription>
           Two separate questions, kept apart on purpose: how people compare us
           to {name}, and what {name} is doing on its own. Mixing them would
@@ -62,7 +64,7 @@ export function CompetitorView({ data }: { data: CompetitorData }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        {/* Signal 1 — comparison posts (they name TakaPay; 100% negative). */}
+        {/* Signal 1 - comparison posts (they name TakaPay; 100% negative). */}
         <div className="rounded-xl border p-4">
           <div className="flex flex-wrap items-center gap-2.5">
             <h3 className="text-sm font-semibold">
@@ -100,7 +102,7 @@ export function CompetitorView({ data }: { data: CompetitorData }) {
               cross-reference our own{" "}
               <a
                 href="#topics"
-                className="text-foreground underline underline-offset-4"
+                className="text-brand underline underline-offset-4"
               >
                 {topicLabel(xref.topic)}
               </a>{" "}
@@ -124,7 +126,7 @@ export function CompetitorView({ data }: { data: CompetitorData }) {
           )}
         </div>
 
-        {/* Signal 2 — competitor-only posts, deliberately NOT brand sentiment. */}
+        {/* Signal 2 - competitor-only posts, deliberately NOT brand sentiment. */}
         <div className="bg-muted/40 rounded-xl border border-dashed p-4">
           <div className="flex flex-wrap items-center gap-2.5">
             <h3 className="text-sm font-semibold">

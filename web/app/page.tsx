@@ -29,6 +29,7 @@ import { TrustPanel, type TrustPanelData } from "@/components/trust-panel";
 import { MentionFeed, type Mention } from "@/components/mention-feed";
 import { Coverage, type LanguageData, type PlatformData } from "@/components/coverage";
 import { topicLabel } from "@/lib/topics";
+import { cn } from "@/lib/utils";
 
 function KpiCard({
   label,
@@ -37,6 +38,7 @@ function KpiCard({
   note,
   icon,
   delay,
+  valueClassName,
 }: {
   label: string;
   value: ReactNode;
@@ -44,6 +46,7 @@ function KpiCard({
   note: string;
   icon: ReactNode;
   delay?: string;
+  valueClassName?: string;
 }) {
   return (
     <Card data-reveal className={delay}>
@@ -52,7 +55,12 @@ function KpiCard({
           {icon}
           {label}
         </CardDescription>
-        <CardTitle className="text-2xl font-semibold tracking-tight tabular-nums lg:text-3xl">
+        <CardTitle
+          className={cn(
+            "text-2xl font-semibold tracking-tight tabular-nums lg:text-3xl",
+            valueClassName
+          )}
+        >
           {value}
         </CardTitle>
         {badge && (
@@ -98,6 +106,7 @@ export default function Home() {
           icon={<AlertTriangle className="size-3.5" />}
           label="Negative sentiment"
           value={<CountUp value={neg.pct} decimals={1} suffix="%" />}
+          valueClassName="text-3xl text-(--sent-negative) lg:text-4xl"
           badge="raw feed said 51.2%"
           note={`${neg.count} of ${h.relevant_mentions} relevant mentions`}
           delay="delay-75"
@@ -120,28 +129,34 @@ export default function Home() {
         />
       </section>
 
-      <Card data-reveal className="py-4">
-        <CardContent className="flex items-start gap-3 text-sm">
-          <Info className="text-muted-foreground mt-0.5 size-4 shrink-0" />
-          <p className="text-muted-foreground">
-            <strong className="text-foreground font-medium">
-              These numbers are already filtered.
-            </strong>{" "}
-            The raw feed reads more positive than reality: it includes posts
-            that never mention TakaPay and labels that contradict their own
-            text. The{" "}
-            <a href="#trust" className="text-foreground underline underline-offset-4">
-              trust panel
-            </a>{" "}
-            has the full data-quality breakdown.
-          </p>
-        </CardContent>
-      </Card>
+      <div
+        data-reveal
+        className="border-brand/40 bg-muted/40 flex items-start gap-3 rounded-lg border-l-2 p-4 text-sm"
+      >
+        <Info className="text-brand mt-0.5 size-4 shrink-0" />
+        <p className="text-muted-foreground">
+          <strong className="text-foreground font-medium">
+            These numbers are already filtered.
+          </strong>{" "}
+          The raw feed reads more positive than reality: it includes posts
+          that never mention TakaPay and labels that contradict their own
+          text. The{" "}
+          <a href="#trust" className="text-brand underline underline-offset-4">
+            trust panel
+          </a>{" "}
+          has the full data-quality breakdown.
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <Card id="sentiment" data-reveal className="scroll-mt-20 lg:col-span-2">
           <CardHeader>
-            <CardTitle>Sentiment breakdown</CardTitle>
+            <h2
+              data-slot="card-title"
+              className="font-heading text-base leading-snug font-medium"
+            >
+              Sentiment breakdown
+            </h2>
             <CardDescription>
               Across the {metrics.sentiment.clean_total} relevant mentions
             </CardDescription>
@@ -156,7 +171,7 @@ export default function Home() {
             <p>
               Negative is the majority sentiment. The unfiltered feed said
               only {metrics.headline.raw_negative_pct}%.{" "}
-              <a href="#trust" className="text-foreground underline underline-offset-4">
+              <a href="#trust" className="text-brand underline underline-offset-4">
                 See why filtering raises it
               </a>
               .
@@ -166,7 +181,12 @@ export default function Home() {
 
         <Card id="topics" data-reveal className="scroll-mt-20 lg:col-span-3">
           <CardHeader>
-            <CardTitle>What&rsquo;s driving the conversation</CardTitle>
+            <h2
+              data-slot="card-title"
+              className="font-heading text-base leading-snug font-medium"
+            >
+              What&rsquo;s driving the conversation
+            </h2>
             <CardDescription>
               Every relevant mention by topic, sorted by volume
             </CardDescription>
@@ -190,7 +210,12 @@ export default function Home() {
 
       <Card id="priority" data-reveal className="scroll-mt-20">
         <CardHeader>
-          <CardTitle>Fix this first</CardTitle>
+          <h2
+            data-slot="card-title"
+            className="font-heading text-base leading-snug font-medium"
+          >
+            Fix this first
+          </h2>
           <CardDescription>
             Operational topics ranked by negative mentions. The thing worth
             fixing first is at the top.
@@ -220,7 +245,7 @@ export default function Home() {
             from this list. What you fix and what you fight are different
             problems: NgoodPay chatter is competitive intelligence, not an
             operational bug to triage.{" "}
-            <a href="#competitor" className="text-foreground underline underline-offset-4">
+            <a href="#competitor" className="text-brand underline underline-offset-4">
               See the competitor view →
             </a>
           </p>

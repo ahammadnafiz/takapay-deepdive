@@ -17,11 +17,12 @@ import {
 } from "@/components/ui/chart";
 
 const volumeConfig = {
-  count: { label: "Posts", color: "var(--chart-4)" },
+  count: { label: "Posts", color: "var(--brand)" },
 } satisfies ChartConfig;
 
-// Shared horizontal volume bars (language coverage, platform volume) —
-// monochrome: a single magnitude series, not competing categories.
+// Shared horizontal volume bars (language coverage, platform volume) in the
+// single UI accent: one magnitude series, not competing categories, and
+// deliberately not a sentiment color.
 export function VolumeBars({
   rows,
   height = 160,
@@ -72,8 +73,8 @@ const negativityConfig = {
   pct_negative: { label: "% negative", color: "var(--sent-negative)" },
 } satisfies ChartConfig;
 
-// %-negative per platform on a fixed 0–100 scale with the overall reference
-// line, so "the band is flat — platform doesn't explain sentiment" is visible.
+// %-negative per platform on a fixed 0-100 scale with the overall reference
+// line, so "the band is flat - platform doesn't explain sentiment" is visible.
 export function NegativityBars({
   rows,
   reference,

@@ -108,6 +108,7 @@ export function AppSidebar() {
                     asChild
                     isActive={activeId === item.id}
                     tooltip={item.label}
+                    className="transition-colors active:scale-[0.98] data-active:text-brand"
                   >
                     <a
                       href={`#${item.id}`}
