@@ -27,6 +27,7 @@ import {
 import { CompetitorView, type CompetitorData } from "@/components/competitor-view";
 import { TrustPanel, type TrustPanelData } from "@/components/trust-panel";
 import { MentionFeed, type Mention } from "@/components/mention-feed";
+import { Situation } from "@/components/situation";
 import { Coverage, type LanguageData, type PlatformData } from "@/components/coverage";
 import { topicLabel } from "@/lib/topics";
 import { cn } from "@/lib/utils";
@@ -81,9 +82,11 @@ export default function Home() {
   const pr = metrics.priority_ranking;
 
   return (
+    <>
+    <Situation />
     <div id="overview" className="flex scroll-mt-20 flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
+        <h2 className="text-2xl font-semibold tracking-tight">Overview</h2>
         <p className="text-muted-foreground max-w-3xl text-sm">
           What people said about TakaPay across 7 platforms in June 2026. Of{" "}
           {h.total_mentions} posts collected, {h.relevant_mentions} actually
@@ -263,5 +266,6 @@ export default function Home() {
         platform={metrics.platform as PlatformData}
       />
     </div>
+    </>
   );
 }

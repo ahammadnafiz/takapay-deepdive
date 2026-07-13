@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   BookOpen,
+  Compass,
   Globe,
   LayoutGrid,
   ListOrdered,
@@ -29,6 +30,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const NAV = [
+  { label: "The situation", icon: Compass, id: "situation" },
   { label: "Overview", icon: LayoutGrid, id: "overview" },
   { label: "Sentiment", icon: PieChart, id: "sentiment" },
   { label: "Topics", icon: ListOrdered, id: "topics" },
