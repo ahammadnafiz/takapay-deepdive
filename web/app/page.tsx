@@ -1,23 +1,11 @@
-import type { ReactNode } from "react";
-import {
-  AlertTriangle,
-  Info,
-  MessageSquareText,
-  Swords,
-} from "lucide-react";
-
 import metrics from "@/lib/metrics.json";
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-import { CountUp } from "@/components/CountUp";
 import { SentimentDonut } from "@/components/charts/sentiment-donut";
 import { TopicBars, type Topic } from "@/components/charts/topic-bars";
 import {
@@ -29,128 +17,14 @@ import { TrustPanel, type TrustPanelData } from "@/components/trust-panel";
 import { MentionFeed, type Mention } from "@/components/mention-feed";
 import { Situation } from "@/components/situation";
 import { Coverage, type LanguageData, type PlatformData } from "@/components/coverage";
-import { topicLabel } from "@/lib/topics";
-import { cn } from "@/lib/utils";
-
-function KpiCard({
-  label,
-  value,
-  badge,
-  note,
-  icon,
-  delay,
-  valueClassName,
-}: {
-  label: string;
-  value: ReactNode;
-  badge?: string;
-  note: string;
-  icon: ReactNode;
-  delay?: string;
-  valueClassName?: string;
-}) {
-  return (
-    <Card data-reveal className={delay}>
-      <CardHeader>
-        <CardDescription className="flex items-center gap-1.5">
-          {icon}
-          {label}
-        </CardDescription>
-        <CardTitle
-          className={cn(
-            "text-2xl font-semibold tracking-tight tabular-nums lg:text-3xl",
-            valueClassName
-          )}
-        >
-          {value}
-        </CardTitle>
-        {badge && (
-          <CardAction>
-            <Badge variant="outline">{badge}</Badge>
-          </CardAction>
-        )}
-      </CardHeader>
-      <CardFooter className="text-muted-foreground text-xs">{note}</CardFooter>
-    </Card>
-  );
-}
 
 export default function Home() {
-  const h = metrics.headline;
-  const neg = h.clean_sentiment.negative;
-  const pain = h.top_pain_point;
   const pr = metrics.priority_ranking;
 
   return (
     <>
     <Situation />
-    <div id="overview" className="flex scroll-mt-20 flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <h2 className="text-2xl font-semibold tracking-tight">Overview</h2>
-        <p className="text-muted-foreground max-w-3xl text-sm">
-          What people said about TakaPay across 7 platforms in June 2026. Of{" "}
-          {h.total_mentions} posts collected, {h.relevant_mentions} actually
-          name the brand. Every number on this page is computed on those.
-        </p>
-      </div>
-
-      <section
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
-        aria-label="Headline metrics"
-      >
-        <KpiCard
-          icon={<MessageSquareText className="size-3.5" />}
-          label="Relevant mentions"
-          value={<CountUp value={h.relevant_mentions} />}
-          badge={`of ${h.total_mentions}`}
-          note={`${h.excluded_mentions} off-brand posts filtered out`}
-        />
-        <KpiCard
-          icon={<AlertTriangle className="size-3.5" />}
-          label="Negative sentiment"
-          value={<CountUp value={neg.pct} decimals={1} suffix="%" />}
-          valueClassName="text-3xl text-(--sent-negative) lg:text-4xl"
-          badge="raw feed said 51.2%"
-          note={`${neg.count} of ${h.relevant_mentions} relevant mentions`}
-          delay="delay-75"
-        />
-        <KpiCard
-          icon={<AlertTriangle className="size-3.5" />}
-          label="Top pain point"
-          value={
-            <span className="text-xl lg:text-2xl">{topicLabel(pain.topic)}</span>
-          }
-          note={`${pain.count} mentions, ${pain.pct_negative}% negative. Nothing else is close.`}
-          delay="delay-150"
-        />
-        <KpiCard
-          icon={<Swords className="size-3.5" />}
-          label="Competitor threat"
-          value={<span className="text-xl lg:text-2xl">{h.top_competitor.name}</span>}
-          note={`${h.top_competitor.mentions} competitor posts in the feed`}
-          delay="delay-225"
-        />
-      </section>
-
-      <div
-        data-reveal
-        className="border-brand/40 bg-muted/40 flex items-start gap-3 rounded-lg border-l-2 p-4 text-sm"
-      >
-        <Info className="text-brand mt-0.5 size-4 shrink-0" />
-        <p className="text-muted-foreground">
-          <strong className="text-foreground font-medium">
-            These numbers are already filtered.
-          </strong>{" "}
-          The raw feed reads more positive than reality: it includes posts
-          that never mention TakaPay and labels that contradict their own
-          text. The{" "}
-          <a href="#trust" className="text-brand underline underline-offset-4">
-            trust panel
-          </a>{" "}
-          has the full data-quality breakdown.
-        </p>
-      </div>
-
+    <div className="flex flex-col gap-4">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <Card id="sentiment" data-reveal className="scroll-mt-20 lg:col-span-2">
           <CardHeader>

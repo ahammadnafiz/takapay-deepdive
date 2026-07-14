@@ -5,7 +5,6 @@ import {
   BookOpen,
   Compass,
   Globe,
-  LayoutGrid,
   ListOrdered,
   MessagesSquare,
   PieChart,
@@ -31,7 +30,6 @@ import {
 
 const NAV = [
   { label: "The situation", icon: Compass, id: "situation" },
-  { label: "Overview", icon: LayoutGrid, id: "overview" },
   { label: "Sentiment", icon: PieChart, id: "sentiment" },
   { label: "Topics", icon: ListOrdered, id: "topics" },
   { label: "Fix this first", icon: Target, id: "priority" },
@@ -83,7 +81,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#overview">
+              <a href="#situation">
                 <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Waves className="size-4" />
                 </div>

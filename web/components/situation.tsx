@@ -3,11 +3,10 @@ import {
   ArrowDown,
   Link2,
   Megaphone,
+  MessageSquareText,
   ShieldAlert,
   ShieldHalf,
   Swords,
-  Target,
-  ThumbsUp,
   TriangleAlert,
   Wrench,
 } from "lucide-react";
@@ -101,6 +100,7 @@ function Kpi({
   icon,
   label,
   value,
+  badge,
   note,
   valueClassName,
   delay,
@@ -108,12 +108,13 @@ function Kpi({
   icon: ReactNode;
   label: string;
   value: ReactNode;
+  badge?: string;
   note: string;
   valueClassName?: string;
   delay?: string;
 }) {
   return (
-    <Card data-reveal className={cn("gap-2 py-4", delay)}>
+    <Card data-reveal className={cn("gap-1.5 py-4", delay)}>
       <CardHeader className="gap-1">
         <CardDescription className="flex items-center gap-1.5 text-xs font-medium tracking-wide uppercase">
           {icon}
@@ -127,8 +128,13 @@ function Kpi({
         >
           {value}
         </CardTitle>
+        {badge && (
+          <CardAction>
+            <Badge variant="outline">{badge}</Badge>
+          </CardAction>
+        )}
       </CardHeader>
-      <CardFooter className="text-muted-foreground text-xs">{note}</CardFooter>
+      <CardContent className="text-muted-foreground text-xs">{note}</CardContent>
     </Card>
   );
 }
@@ -288,9 +294,6 @@ export function Situation() {
   const pain = topics[0];
   const complaintsTotal = pr.top_negative + pr.rest_negative;
   const stuckShare = Math.round((pr.top_negative / complaintsTotal) * 100);
-  const compWins = Math.round(
-    (comp.comparison.count * (100 - comp.comparison.pct_negative)) / 100
-  );
   const themeMax = Math.max(...comp.comparison.themes.map((t) => t.count));
 
   const platforms = [...metrics.platform.rows].sort(
@@ -309,78 +312,41 @@ export function Situation() {
     }));
   const topStrength = strengths[0];
 
-  const lovedTopics = topics.filter(
-    (t) => t.total >= LOW_N && verdict(t).label === "loved"
-  );
-  const lovedPosts = lovedTopics.reduce((s, t) => s + t.total, 0);
-  const demandLabels = topics
-    .filter((t) => t.total >= LOW_N && verdict(t).label === "demand")
-    .map((t) => topicLabel(t.topic).toLowerCase())
-    .join(" and ");
-  const demandLabelsCap =
-    demandLabels.charAt(0).toUpperCase() + demandLabels.slice(1);
-
   return (
     <section
       id="situation"
       aria-label="Situation briefing"
       className="flex scroll-mt-20 flex-col gap-4"
     >
-      <div data-reveal className="flex flex-col gap-1.5">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <p className="text-muted-foreground text-xs font-medium tracking-widest uppercase">
-            The situation · TakaPay · June 2026
-          </p>
-          <Badge
-            variant="outline"
-            className="border-(--sent-negative)/30 bg-(--sent-negative)/5 text-(--sent-negative) gap-1.5 text-[10px] font-medium tracking-wide uppercase"
-          >
-            <span className="size-1.5 rounded-full bg-current" />
-            Under pressure
-          </Badge>
-          <span className="text-muted-foreground ml-auto hidden text-xs sm:inline">
-            {h.excluded_mentions} off-brand posts removed before counting
-          </span>
-        </div>
-        <h1 className="max-w-4xl text-3xl font-semibold tracking-tight text-balance lg:text-4xl">
-          Clean the feed and TakaPay runs {Math.round(clean.negative.pct)}%
-          negative, most of it money that never arrives.
-        </h1>
-        <p className="text-muted-foreground max-w-4xl text-sm">
-          {h.total_mentions} posts collected, {h.relevant_mentions} about the
-          brand. What to fix, what to fight, what to trust, and the calls that
-          follow.
-        </p>
-      </div>
-
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <Kpi
+          icon={<MessageSquareText className="size-3.5" />}
+          label="Relevant mentions"
+          value={<CountUp value={h.relevant_mentions} />}
+          badge={`of ${h.total_mentions}`}
+          note={`${h.excluded_mentions} off-brand posts filtered out`}
+        />
         <Kpi
           icon={<TriangleAlert className="size-3.5" />}
           label="Negative sentiment"
           value={<CountUp value={clean.negative.pct} decimals={1} suffix="%" />}
           valueClassName="text-(--sent-negative)"
-          note={`${clean.negative.count} of ${h.relevant_mentions} relevant posts`}
-        />
-        <Kpi
-          icon={<Target className="size-3.5" />}
-          label="Top pain point"
-          value={<CountUp value={pain.total} />}
-          note={`${topicLabel(pain.topic)} · ${pain.pct_negative}% negative`}
+          badge={`raw feed said ${h.raw_negative_pct}%`}
+          note={`${clean.negative.count} of ${h.relevant_mentions} relevant mentions`}
           delay="delay-75"
         />
         <Kpi
-          icon={<Swords className="size-3.5" />}
-          label="Competitor mentions"
-          value={<CountUp value={h.top_competitor.mentions} />}
-          note={`${comp.name} · ${comp.comparison.count} head-to-head, ${compWins} won`}
+          icon={<TriangleAlert className="size-3.5" />}
+          label="Top pain point"
+          value={<span className="text-2xl">{topicLabel(pain.topic)}</span>}
+          note={`${pain.total} mentions, ${pain.pct_negative}% negative. Nothing else is close.`}
           delay="delay-150"
         />
         <Kpi
-          icon={<ThumbsUp className="size-3.5" />}
-          label="Positive posts"
-          value={<CountUp value={clean.positive.count} />}
-          valueClassName="text-(--sent-positive)"
-          note="cashback · recharge · send money"
+          icon={<Swords className="size-3.5" />}
+          label="Competitor threat"
+          value={<span className="text-2xl">{comp.name}</span>}
+          note={`${h.top_competitor.mentions} competitor posts in the feed`}
           delay="delay-225"
         />
       </div>
@@ -454,34 +420,10 @@ export function Situation() {
                 </Badge>
               </CardAction>
             </CardHeader>
-            <CardContent className="flex flex-1 flex-col gap-2">
+            <CardContent className="flex flex-1 flex-col justify-between gap-2">
               {topics.map((t) => (
                 <ThemeRow key={t.topic} t={t} />
               ))}
-              <div className="mt-auto grid grid-cols-1 gap-4 border-t pt-4 sm:grid-cols-2">
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-medium">
-                    Money that moves is loved; money that stalls is the crisis
-                  </p>
-                  <p className="text-muted-foreground text-xs">
-                    The {lovedTopics.length} loved topics ({lovedPosts} posts)
-                    are all completed transactions. Every crisis and sore point
-                    is a failure of the same flow: the brand is judged on
-                    whether money arrives.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-medium">
-                    Gray rows are questions, not complaints
-                  </p>
-                  <p className="text-muted-foreground text-xs">
-                    {demandLabelsCap} carry zero negativity because they are
-                    &ldquo;where&rdquo; and &ldquo;how&rdquo; queries: demand to
-                    serve, not anger to fix. Scoring them negative would invent
-                    a problem that is not there.
-                  </p>
-                </div>
-              </div>
             </CardContent>
             <CardFooter className="text-muted-foreground border-t text-xs [.border-t]:pt-3">
               <p>
@@ -652,7 +594,7 @@ export function Situation() {
           headcount.
         </p>
         <a
-          href="#overview"
+          href="#sentiment"
           className="text-brand flex items-center gap-1 whitespace-nowrap underline underline-offset-4"
         >
           Full evidence below
